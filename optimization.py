@@ -5,9 +5,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import cvxpy as cp
 
-assets = ['AAPL', 'MSFT', 'AMZN']
-start_date = '2018-01-01'
-end_date = '2023-06-01'
+assets = [] # please fill in Stock Symbol
+start_date = '' # please fill in this format YYYY-MM-DD
+end_date = '' # please fill in this format YYYY-MM-DD
 
 data = yf.download(assets, start=start_date, end=end_date)['Adj Close']
 
@@ -79,7 +79,7 @@ portfolio_return = np.dot(returns.mean(), optimal_weights)
 portfolio_risk = np.sqrt(np.dot(optimal_weights.T, np.dot(returns.cov(), optimal_weights)))
 
 # Sharpe ratio of the portfolio
-risk_free_rate = 0.02  # Assuming a risk-free rate of 2%
+risk_free_rate = XX    # please fill in
 sharpe_ratio = (portfolio_return - risk_free_rate) / portfolio_risk
 
 print(f"Expected Return: {portfolio_return:.2%}")
