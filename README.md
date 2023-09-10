@@ -32,7 +32,9 @@ pip install yfinance nsepython numpy pandas matplotlib cvxpy
 2. You can modify the following parameters in the script to customize your analysis:
 
   a. assets: A list of stock symbols to analyze.
+  
   b. start_date and end_date: The date range for historical data retrieval.
+  
   c. risk_free_rate: The assumed risk-free rate for calculating the Sharpe ratio. 
   
 3. Run the code
