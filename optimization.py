@@ -1,22 +1,21 @@
 import yfinance as yf
-import nsepython as nsep
-import numpy as np
+import numpy as npy
 import pandas as pd
 import matplotlib.pyplot as plt
-import cvxpy as cp
+import cvxpy as cpy
 
 assets = [] # please fill in Stock Symbol
 start_date = '' # please fill in this format YYYY-MM-DD
 end_date = '' # please fill in this format YYYY-MM-DD
 
-data = yf.download(assets, start=start_date, end=end_date)['Adj Close']
+data_set = yf.download(assets, start=start_date, end=end_date)['Adj Close']
 
-returns = data.pct_change().dropna()
+returns = data_set.pct_change().dropna()
 
 # Plotting the price movements
 plt.figure(figsize=(10, 6))
 for asset in assets:
-    plt.plot(data.index, data[asset], label=asset)
+    plt.plot(data_set.index, data_set[asset], label=asset)
 
 plt.xlabel('Date')
 plt.ylabel('Price')
@@ -27,7 +26,7 @@ plt.show()
 
 
 # Calculating daily returns
-returns = data.pct_change().dropna()
+returns = data_set.pct_change().dropna()
 
 # Plotting the distribution of returns
 plt.figure(figsize=(10, 6))
@@ -38,48 +37,47 @@ plt.xlabel('Daily Return')
 plt.ylabel('Frequency')
 plt.title('Distribution of Daily Returns')
 plt.legend()
-
 plt.show()
 
 
 
 # Number of assets
-n_assets = len(assets)
+num_of_assets = len(assets)
 
 # Allocation weights variable
-weights = cp.Variable(n_assets)
+weights = cpy.Variable(num_of_assets)
 
-# Constraints
+# Set the constraints
 constraints = [
     weights >= 0,
-    cp.sum(weights) == 1
+    cpy.sum(weights) == 1
 ]
 
 # Expected return
-expected_return = cp.sum(cp.multiply(returns.mean(), weights))
+expected_return = cpy.sum(cpy.multiply(returns.mean(), weights))
 
 # Portfolio variance
-portfolio_variance = cp.quad_form(weights, returns.cov())
+portfolio_variance = cpy.quad_form(weights, returns.cov())
 
 # Objective function
-objective = cp.Maximize(expected_return - 0.5 * portfolio_variance)
+objective = cpy.Maximize(expected_return - 0.5 * portfolio_variance)
 
 
 # Solve the optimization problem
-problem = cp.Problem(objective, constraints)
+problem = cpy.Problem(objective, constraints)
 problem.solve()
 
 # Optimal allocation weights
 optimal_weights = weights.value
 
 # Expected return of the portfolio
-portfolio_return = np.dot(returns.mean(), optimal_weights)
+portfolio_return = npy.dot(returns.mean(), optimal_weights)
 
 # Risk (standard deviation) of the portfolio
-portfolio_risk = np.sqrt(np.dot(optimal_weights.T, np.dot(returns.cov(), optimal_weights)))
+portfolio_risk = npy.sqrt(npy.dot(optimal_weights.T, npy.dot(returns.cov(), optimal_weights)))
 
 # Sharpe ratio of the portfolio
-risk_free_rate = XX    # please fill in
+risk_free_rate =     # please fill in
 sharpe_ratio = (portfolio_return - risk_free_rate) / portfolio_risk
 
 print(f"Expected Return: {portfolio_return:.2%}")
